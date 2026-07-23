@@ -1,0 +1,79 @@
+baseURL = "https://example.org"
+locale = "zh-cn"
+defaultContentLanguage = "zh-cn"
+title = "Pij's Blog"
+theme = "PaperMod"
+paginate = 10
+enableRobotsTXT = true
+enableEmoji = true
+
+[params]
+  description = "个人博客与技术文档"
+  author = "Pi"
+  defaultTheme = "auto"
+  disableThemeToggle = false
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+
+  [params.homeInfoParams]
+    Title = "嗨，我是 Pi 👋"
+    Content = "这里记录我的想法、笔记和一些技术文档。"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/"
+
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:hello@example.com"
+
+  [params.cover]
+    hiddenInSingle = false
+
+[menu]
+
+  [[menu.main]]
+    identifier = "posts"
+    name = "博客"
+    url = "/posts/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "docs"
+    name = "文档"
+    url = "/docs/"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 30
+
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/"
+    weight = 40
+
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 50
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[markup]
+  [markup.highlight]
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = false

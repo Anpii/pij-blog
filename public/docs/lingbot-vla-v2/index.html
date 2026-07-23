@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1314&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>LingBot-VLA 2.0: 从基础模型到实际机器人应用 | Pij&#39;s Blog</title>
+<meta name="keywords" content="VLA, 机器人, 具身智能, 深度学习, MoE">
+<meta name="description" content="概述
+LingBot-VLA 2.0 是一个面向实际机器人应用的 Vision-Language-Action（视觉-语言-动作）基础模型，由 Robbyant 团队开发。论文标题为 &ldquo;From Foundation to Application: Improving VLA Models in Practice&rdquo;。
+相较于 LingBot-VLA 1.0，2.0 版本的三大核心改进：
+
+跨任务、跨本体泛化：重新设计数据流水线，整合约 60,000 小时 预训练数据
+扩展动作空间：统一表示支持手臂、末端执行器、夹爪、灵巧手、腰部、头部和移动底盘信号
+预测性动力学建模：将未来预测作为代理任务，融合语义时间先验和几何线索
+
+
+核心能力
+
+	
+			
+					维度
+					描述
+			
+	
+	
+			
+					模型尺寸
+					6B 参数量
+			
+			
+					视觉主干
+					Qwen3-VL-4B-Instruct
+			
+			
+					动作专家
+					36 层 Qwen2 架构 &#43; 稀疏 MoE
+			
+			
+					动作维度
+					55 维标准化状态/动作向量
+			
+			
+					预训练数据
+					~60,000 小时（50,000h 机器人 &#43; 10,000h 人类第一人称）
+			
+			
+					机器人构型
+					20 种
+			
+			
+					推理速度
+					RTX 4090D 上 ~130ms/步（10 步去噪）
+			
+			
+					基础模型
+					LingBot-VLA-V2-6B（原生深度版本）
+			
+	
+
+
+数据流水线
+数据规模
+LingBot-VLA 2.0 使用海量异构预训练语料：
+
+50,000 小时 机器人轨迹，覆盖 20 种机器人构型
+10,000 小时 第一人称人类操作视频
+
+数据类型涵盖单臂、双臂、半人形、全人形及第一人称视角。">
+<meta name="author" content="Pi">
+<link rel="canonical" href="http://localhost:1314/docs/lingbot-vla-v2/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.cd9298b33628769aa1bc1acebbbfd7aa11ce81dfe03484d479e1907760249a1d.css" integrity="sha256-zZKYszYodpqhvBrOu7/XqhHOgd/gNITUeeGQd2Akmh0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1314/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1314/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1314/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1314/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1314/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh-cn" href="http://localhost:1314/docs/lingbot-vla-v2/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="http://localhost:1314/" accesskey="h" title="Pij&#39;s Blog (Alt + H)">Pij&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+            <li>
+                <a href="http://localhost:1314/posts/" title="博客">
+                    <span>博客</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1314/docs/" title="文档">
+                    <span>文档</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1314/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1314/search/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1314/archives/" title="归档">
+                    <span>归档</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <nav class="breadcrumbs" role="navigation" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <a href="/docs/">文档</a>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+</nav>
+    <h1 class="post-title entry-hint-parent">
+      LingBot-VLA 2.0: 从基础模型到实际机器人应用
+    </h1>
+    <div class="post-meta">
+
+<span title='2026-07-23 01:30:00 +0800 CST'>July 23, 2026</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>771 words</span>&nbsp;·&nbsp;<span>Pi</span>
+
+</div>
+  </header> 
+  <div class="post-content md-content"><h2 id="概述">概述<a hidden class="anchor" aria-hidden="true" href="#概述">#</a></h2>
+<p><strong>LingBot-VLA 2.0</strong> 是一个面向实际机器人应用的 Vision-Language-Action（视觉-语言-动作）基础模型，由 Robbyant 团队开发。论文标题为 <em>&ldquo;From Foundation to Application: Improving VLA Models in Practice&rdquo;</em>。</p>
+<p>相较于 LingBot-VLA 1.0，2.0 版本的三大核心改进：</p>
+<ol>
+<li><strong>跨任务、跨本体泛化</strong>：重新设计数据流水线，整合约 <strong>60,000 小时</strong> 预训练数据</li>
+<li><strong>扩展动作空间</strong>：统一表示支持手臂、末端执行器、夹爪、灵巧手、腰部、头部和移动底盘信号</li>
+<li><strong>预测性动力学建模</strong>：将未来预测作为代理任务，融合语义时间先验和几何线索</li>
+</ol>
+<hr>
+<h2 id="核心能力">核心能力<a hidden class="anchor" aria-hidden="true" href="#核心能力">#</a></h2>
+<table>
+	<thead>
+			<tr>
+					<th>维度</th>
+					<th>描述</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>模型尺寸</td>
+					<td><strong>6B</strong> 参数量</td>
+			</tr>
+			<tr>
+					<td>视觉主干</td>
+					<td>Qwen3-VL-4B-Instruct</td>
+			</tr>
+			<tr>
+					<td>动作专家</td>
+					<td>36 层 Qwen2 架构 + 稀疏 MoE</td>
+			</tr>
+			<tr>
+					<td>动作维度</td>
+					<td>55 维标准化状态/动作向量</td>
+			</tr>
+			<tr>
+					<td>预训练数据</td>
+					<td>~60,000 小时（50,000h 机器人 + 10,000h 人类第一人称）</td>
+			</tr>
+			<tr>
+					<td>机器人构型</td>
+					<td>20 种</td>
+			</tr>
+			<tr>
+					<td>推理速度</td>
+					<td>RTX 4090D 上 ~<strong>130ms</strong>/步（10 步去噪）</td>
+			</tr>
+			<tr>
+					<td>基础模型</td>
+					<td>LingBot-VLA-V2-6B（原生深度版本）</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="数据流水线">数据流水线<a hidden class="anchor" aria-hidden="true" href="#数据流水线">#</a></h2>
+<h3 id="数据规模">数据规模<a hidden class="anchor" aria-hidden="true" href="#数据规模">#</a></h3>
+<p>LingBot-VLA 2.0 使用海量异构预训练语料：</p>
+<ul>
+<li><strong>50,000 小时</strong> 机器人轨迹，覆盖 20 种机器人构型</li>
+<li><strong>10,000 小时</strong> 第一人称人类操作视频</li>
+</ul>
+<p>数据类型涵盖单臂、双臂、半人形、全人形及第一人称视角。</p>
+<h3 id="数据筛选">数据筛选<a hidden class="anchor" aria-hidden="true" href="#数据筛选">#</a></h3>
+<p><strong>机器人数据过滤策略：</strong></p>
+<ul>
+<li>移除视频-状态不同步的样本</li>
+<li>剔除模糊/遮挡视频</li>
+<li>多视角对齐校验</li>
+<li>异常速度/加速度/加加速度检测</li>
+<li>静态信号片段去除</li>
+</ul>
+<p><strong>第一人称视频过滤策略：</strong></p>
+<ul>
+<li>保留以操作为中心的视频</li>
+<li>重建并标准化手部轨迹</li>
+<li>过滤不稳定的相机或手部运动估计</li>
+</ul>
+<p><img alt="数据分布概览" loading="lazy" src="/images/lingbot-vla-v2/lingbot_vla2_data_demo.png"></p>
+<p><img alt="数据筛选与处理流程" loading="lazy" src="/images/lingbot-vla-v2/lingbot_vla2_data_process.png"></p>
+<hr>
+<h2 id="模型架构">模型架构<a hidden class="anchor" aria-hidden="true" href="#模型架构">#</a></h2>
+<h3 id="整体框架">整体框架<a hidden class="anchor" aria-hidden="true" href="#整体框架">#</a></h3>
+<p>LingBot-VLA 2.0 的核心架构分为三个主要部分：</p>
+<ol>
+<li><strong>视觉语言主干（VLM Backbone）</strong>：基于 Qwen3-VL-4B-Instruct，负责多模态理解</li>
+<li><strong>动作专家（Action Expert）</strong>：36 层 Qwen2 解码器，包含稀疏 MoE（Mixture-of-Experts）层</li>
+<li><strong>双查询蒸馏（Dual-Query Distillation）</strong>：从 LingBot-Depth 和 DINO-Video 蒸馏先验知识</li>
+</ol>
+<p><img alt="LingBot-VLA 2.0 整体架构" loading="lazy" src="/images/lingbot-vla-v2/lingbot_vla2_framework.png"></p>
+<h3 id="视觉语言主干qwen3-vl-4b">视觉语言主干（Qwen3-VL-4B）<a hidden class="anchor" aria-hidden="true" href="#视觉语言主干qwen3-vl-4b">#</a></h3>
+<ul>
+<li>基于 <strong>Qwen3-VL-4B-Instruct</strong> 作为多模态编码器</li>
+<li>支持图像和视频输入</li>
+<li>使用 Flash Attention 2 加速</li>
+<li>训练时可冻结视觉编码器，仅训练动作专家</li>
+</ul>
+<h3 id="统一动作表示">统一动作表示<a hidden class="anchor" aria-hidden="true" href="#统一动作表示">#</a></h3>
+<p>LingBot-VLA 2.0 将不同机器人的状态/动作映射到一个 <strong>55 维</strong> 标准化向量空间：</p>
+<table>
+	<thead>
+			<tr>
+					<th>维度</th>
+					<th>含义</th>
+					<th style="text-align: center">维度数</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Arm Joint Position</td>
+					<td>手臂关节位置</td>
+					<td style="text-align: center">14</td>
+			</tr>
+			<tr>
+					<td>End-effector Pose</td>
+					<td>末端执行器姿态</td>
+					<td style="text-align: center">14</td>
+			</tr>
+			<tr>
+					<td>Gripper Position</td>
+					<td>夹爪位置</td>
+					<td style="text-align: center">2</td>
+			</tr>
+			<tr>
+					<td>Hand Joint Position</td>
+					<td>灵巧手关节位置</td>
+					<td style="text-align: center">12</td>
+			</tr>
+			<tr>
+					<td>Waist Position</td>
+					<td>腰部位置</td>
+					<td style="text-align: center">4</td>
+			</tr>
+			<tr>
+					<td>Head Position</td>
+					<td>头部位置</td>
+					<td style="text-align: center">2</td>
+			</tr>
+			<tr>
+					<td>Mobility Signal</td>
+					<td>移动信号</td>
+					<td style="text-align: center">3</td>
+			</tr>
+			<tr>
+					<td>Reserved</td>
+					<td>预留维度</td>
+					<td style="text-align: center">4</td>
+			</tr>
+	</tbody>
+</table>
+<p><img alt="55 维统一动作空间" loading="lazy" src="/images/lingbot-vla-v2/lingbot_vla2_data_dimension.png"></p>
+<h3 id="moe-action-expert">MoE Action Expert<a hidden class="anchor" aria-hidden="true" href="#moe-action-expert">#</a></h3>
+<p>为提高跨本体扩展能力，LingBot-VLA 2.0 在动作专家中引入了<strong>稀疏 MoE 层</strong>：</p>
+<ul>
+<li><strong>细粒度专家分割</strong>（Fine-grained Expert Segmentation）</li>
+<li><strong>共享专家隔离</strong>（Shared Expert Isolation）</li>
+<li>允许通用先验和专长模式在相同计算预算下共存</li>
+<li>支持 Token-Level Routing，每个 token 独立选择专家</li>
+</ul>
+<p><strong>MoE 关键配置：</strong></p>
+<ul>
+<li>专家数量：32（可配置）</li>
+<li>Top-K：1（每 token 选一个专家）</li>
+<li>路由激活函数：Softmax 或 Sigmoid</li>
+<li>损失函数：Sequence-wise Auxiliary Loss + Router Z-Loss</li>
+</ul>
+<p><img alt="MoE vs Dense 模型对比" loading="lazy" src="/images/lingbot-vla-v2/lingbot_vla2_loss_mse_comparison.png"></p>
+<h3 id="双查询蒸馏dual-query-distillation">双查询蒸馏（Dual-Query Distillation）<a hidden class="anchor" aria-hidden="true" href="#双查询蒸馏dual-query-distillation">#</a></h3>
+<p>LingBot-VLA 2.0 在输入序列中追加了<strong>当前感知查询</strong>和<strong>未来感知查询</strong>：</p>
+<ul>
+<li><strong>LingBot-Depth</strong>：提供当前场景的几何结构先验（深度信息）</li>
+<li><strong>DINO-Video</strong>：提供未来场景演化的语义时间先验</li>
+</ul>
+<p>这些查询被蒸馏到 VLM 的隐藏状态中，鼓励模型进行因果推理，同时捕捉当前场景几何和未来场景变化。</p>
+<p><img alt="双查询蒸馏机制" loading="lazy" src="/images/lingbot-vla-v2/lingbot_vla2_vis_distillation.png"></p>
+<h3 id="注意力机制">注意力机制<a hidden class="anchor" aria-hidden="true" href="#注意力机制">#</a></h3>
+<ul>
+<li>默认使用 <strong>Flex Attention</strong>（支持自定义 Block Mask）</li>
+<li>支持 Flash Attention 2、SDPA、Eager 等多种后端</li>
+<li>视觉前缀 + 动作后缀的联合注意力计算</li>
+<li>使用 3D 旋转位置编码（mRoPE），支持图像、视频和文本混合输入</li>
+</ul>
+<h3 id="flow-matching-动作生成">Flow Matching 动作生成<a hidden class="anchor" aria-hidden="true" href="#flow-matching-动作生成">#</a></h3>
+<p>动作生成采用 <strong>Flow Matching</strong> 框架：</p>
+<ul>
+<li>训练目标：预测速度场 <code>v_t</code>，而非直接预测动作</li>
+<li>正向过程：<code>x_t = t * noise + (1 - t) * actions</code></li>
+<li>推理过程：从高斯噪声开始，逐步去噪生成动作</li>
+<li>默认 10 步去噪，可在速度和精度之间权衡</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 训练时：MSE loss on velocity</span>
+</span></span><span class="line"><span class="cl"><span class="n">x_t</span> <span class="o">=</span> <span class="n">time</span> <span class="o">*</span> <span class="n">noise</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">time</span><span class="p">)</span> <span class="o">*</span> <span class="n">actions</span>
+</span></span><span class="line"><span class="cl"><span class="n">u_t</span> <span class="o">=</span> <span class="n">noise</span> <span class="o">-</span> <span class="n">actions</span>  <span class="c1"># ground truth velocity</span>
+</span></span><span class="line"><span class="cl"><span class="n">loss</span> <span class="o">=</span> <span class="n">MSE</span><span class="p">(</span><span class="n">v_t_pred</span><span class="p">,</span> <span class="n">u_t</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="训练流程">训练流程<a hidden class="anchor" aria-hidden="true" href="#训练流程">#</a></h2>
+<h3 id="环境配置">环境配置<a hidden class="anchor" aria-hidden="true" href="#环境配置">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># PyTorch 2.8.0 + Python 3.12</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Flash Attention 2.8.3</span>
+</span></span><span class="line"><span class="cl">conda create -n lingbotvla <span class="nv">python</span><span class="o">=</span>3.12
+</span></span><span class="line"><span class="cl">bash tools/create_train_env.sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="后训练post-training">后训练（Post-Training）<a hidden class="anchor" aria-hidden="true" href="#后训练post-training">#</a></h3>
+<p>以 RoboTwin 2.0 的 50 个任务为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash train.sh tasks/vla/train_lingbotvla.py ./configs/vla/robotwin/robotwin.yaml <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --data.train_path assets/training_data/robotwin.txt <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --data.data_name multi <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --train.output_dir output/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>后训练关键配置：</strong></p>
+<ul>
+<li>Sequence-wise Auxiliary Loss：<code>per_sequence</code> 模式，系数 <code>1e-3</code></li>
+<li>Router Z-Loss 系数：<code>1e-4</code></li>
+<li>支持 Muon 优化器（相比 AdamW 收敛更好，但更慢）</li>
+<li>可切换为 Loss-Free Routing（<code>bias_update_speed</code> 控制）</li>
+</ul>
+<h3 id="分布式训练">分布式训练<a hidden class="anchor" aria-hidden="true" href="#分布式训练">#</a></h3>
+<p>项目内置了完整的分布式训练支持：</p>
+<table>
+	<thead>
+			<tr>
+					<th>方案</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>FSDP2</td>
+					<td>全分片数据并行</td>
+			</tr>
+			<tr>
+					<td>Sequence Parallel</td>
+					<td>Ulysses 风格序列并行</td>
+			</tr>
+			<tr>
+					<td>Expert Parallel</td>
+					<td>MoE 专家参数分片</td>
+			</tr>
+			<tr>
+					<td>VeScale</td>
+					<td>华为昇腾 NPU 适配</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="部署与推理">部署与推理<a hidden class="anchor" aria-hidden="true" href="#部署与推理">#</a></h2>
+<h3 id="实时机器人部署">实时机器人部署<a hidden class="anchor" aria-hidden="true" href="#实时机器人部署">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">QWEN3VL_PATH</span><span class="o">=</span>path_to_Qwen3-VL-4B-Instruct
+</span></span><span class="line"><span class="cl">python -m deploy.lingbot_vla_v2_policy <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --model_path path_to_checkpoint <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --use_compile <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --use_length <span class="m">25</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --port port
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>RTX 4090D</strong> 上单次推理约 <strong>130ms</strong>（10 步去噪）</li>
+<li>支持 WebSocket 策略服务器，可集成到机器人控制框架</li>
+<li>使用 <code>torch.compile</code> 进一步加速推理</li>
+</ul>
+<h3 id="开环评估">开环评估<a hidden class="anchor" aria-hidden="true" href="#开环评估">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python scripts/open_loop_eval.py <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --model_path path_to_posttraining_ckpt <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --robo_name robotwin <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --data_path path_to_validation_data <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --use_length <span class="m">50</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="性能表现">性能表现<a hidden class="anchor" aria-hidden="true" href="#性能表现">#</a></h2>
+<h3 id="gm-100-双臂操控">GM-100 双臂操控<a hidden class="anchor" aria-hidden="true" href="#gm-100-双臂操控">#</a></h3>
+<table>
+	<thead>
+			<tr>
+					<th>平台</th>
+					<th style="text-align: center">GR00T N1.7</th>
+					<th style="text-align: center">π₀</th>
+					<th style="text-align: center">LingBot-VLA 1.0</th>
+					<th style="text-align: center"><strong>LingBot-VLA 2.0</strong></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>AgileX Cobot Magic</td>
+					<td style="text-align: center">36.3 / 17.8</td>
+					<td style="text-align: center">59.1 / 32.2</td>
+					<td style="text-align: center">58.2 / 30.0</td>
+					<td style="text-align: center"><strong>66.2 / 34.4</strong></td>
+			</tr>
+			<tr>
+					<td>Galaxea R1Pro</td>
+					<td style="text-align: center">16.4 / 5.6</td>
+					<td style="text-align: center">27.4 / 8.9</td>
+					<td style="text-align: center">32.7 / 15.6</td>
+					<td style="text-align: center"><strong>34.6 / 15.6</strong></td>
+			</tr>
+	</tbody>
+</table>
+<p><em>指标为 进度分/成功率</em></p>
+<p><img alt="GM-100 消融实验" loading="lazy" src="/images/lingbot-vla-v2/lingbot_vla2_gm100_ablation_barplot.png"></p>
+<h3 id="长时程移动操控">长时程移动操控<a hidden class="anchor" aria-hidden="true" href="#长时程移动操控">#</a></h3>
+<table>
+	<thead>
+			<tr>
+					<th>机器人</th>
+					<th>任务</th>
+					<th style="text-align: center">设置</th>
+					<th style="text-align: center"><strong>LingBot-VLA 2.0</strong></th>
+					<th style="text-align: center">π₀</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Astribot S1</td>
+					<td>冰箱整理</td>
+					<td style="text-align: center">域内</td>
+					<td style="text-align: center"><strong>77.1 / 60.0</strong></td>
+					<td style="text-align: center">65.3 / 46.7</td>
+			</tr>
+			<tr>
+					<td>Astribot S1</td>
+					<td>冰箱整理</td>
+					<td style="text-align: center">域外</td>
+					<td style="text-align: center"><strong>37.0 / 13.3</strong></td>
+					<td style="text-align: center">30.3 / 6.7</td>
+			</tr>
+			<tr>
+					<td>Cobot Magic-ARX X5</td>
+					<td>炉灶清理</td>
+					<td style="text-align: center">域内</td>
+					<td style="text-align: center"><strong>84.3 / 66.7</strong></td>
+					<td style="text-align: center">79.9 / 60.0</td>
+			</tr>
+			<tr>
+					<td>Cobot Magic-ARX X5</td>
+					<td>炉灶清理</td>
+					<td style="text-align: center">域外</td>
+					<td style="text-align: center"><strong>67.5 / 40.0</strong></td>
+					<td style="text-align: center">62.5 / 33.3</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="项目结构">项目结构<a hidden class="anchor" aria-hidden="true" href="#项目结构">#</a></h2>
+<pre tabindex="0"><code>lingbot-vla-v2/
+├── lingbotvla/                    # 核心源码
+│   ├── models/                    # 模型定义
+│   │   └── vla/lingbot_vla/       # V2 主模型
+│   │       ├── modeling_lingbot_vla_v2.py  # 主模型与 Flow Matching
+│   │       ├── qwen2_action_expert.py      # MoE Action Expert
+│   │       ├── qwen3vl_in_vla.py           # Qwen3-VL 适配
+│   │       ├── configuration_lingbot_vla.py # 配置
+│   │       └── flex_attention.py           # Flex Attention
+│   ├── data/                      # 数据加载与处理
+│   ├── distributed/               # 分布式训练（FSDP、EP、SP）
+│   │   ├── moe/                   # MoE 通信
+│   │   ├── fsdp2/                 # FSDP2 实现
+│   │   └── sequence_parallel/     # 序列并行
+│   ├── ops/                       # 高性能算子
+│   │   ├── fused_moe.py           # 融合 MoE 算子
+│   │   ├── group_gemm/            # Group GEMM
+│   │   └── robby_moe.py           # Robbyant 自定义 MoE
+│   ├── optim/                     # 优化器（Muon）
+│   └── schedulers/flow_match.py   # Flow Matching 调度器
+├── deploy/                        # 部署脚本
+├── configs/                       # 配置文件
+│   ├── vla/                       # 训练配置
+│   └── robot_configs/             # 机器人参数配置
+├── scripts/                       # 工具脚本
+└── assets/                        # 论文图片与数据
+</code></pre><hr>
+<h2 id="引用">引用<a hidden class="anchor" aria-hidden="true" href="#引用">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bibtex" data-lang="bibtex"><span class="line"><span class="cl"><span class="nc">@article</span><span class="p">{</span><span class="nl">lingbotvla2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="na">title</span><span class="p">=</span><span class="s">{From Foundation to Application: Improving VLA Models in Practice}</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">      <span class="na">author</span><span class="p">=</span><span class="s">{Wei Wu and Fangjing Wang and Fan Lu and He Sun and Shi Liu and Yunnan Wang 
+</span></span></span><span class="line"><span class="cl"><span class="s">              and Yibin Yan and Yong Wang and Shuailei Ma and Xinyang Wang and Yibin Liu 
+</span></span></span><span class="line"><span class="cl"><span class="s">              and Shuai Yang and Tianxiang Zhou and Kejia Zhang and Lei Zhou and Cheng Su 
+</span></span></span><span class="line"><span class="cl"><span class="s">              and Nan Xue and Bin Tan and Han Zhang and Youchao Zhang and Fei Liao 
+</span></span></span><span class="line"><span class="cl"><span class="s">              and Xing Zhu and Yujun Shen and Kecheng Zheng}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2607.06403}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="na">year</span><span class="p">=</span><span class="s">{2026}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="相关链接">相关链接<a hidden class="anchor" aria-hidden="true" href="#相关链接">#</a></h2>
+<ul>
+<li><a href="https://arxiv.org/pdf/2607.06403">论文 PDF</a></li>
+<li><a href="https://technology.robbyant.com/lingbot-vla-v2">项目主页</a></li>
+<li><a href="https://huggingface.co/collections/robbyant/lingbot-vla-v2">Hugging Face 模型</a></li>
+<li><a href="https://modelscope.cn/collections/Robbyant/LingBot-VLA-V2">ModelScope 模型</a></li>
+<li><a href="https://github.com/Robbyant/lingbot-vla-v2">GitHub 仓库</a></li>
+<li><a href="https://www.apache.org/licenses/LICENSE-2.0">LICENSE: Apache 2.0</a></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1314/tags/vla/">VLA</a></li>
+      <li><a href="http://localhost:1314/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA/">机器人</a></li>
+      <li><a href="http://localhost:1314/tags/%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD/">具身智能</a></li>
+      <li><a href="http://localhost:1314/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li>
+      <li><a href="http://localhost:1314/tags/moe/">MoE</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1314/docs/getting-started/">
+    <span class="title">« </span>
+    <span>快速入门</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1314/">Pij&#39;s Blog</a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

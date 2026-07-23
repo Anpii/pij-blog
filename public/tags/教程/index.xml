@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>教程 on Pij&#39;s Blog</title>
+    <link>http://localhost:1314/tags/%E6%95%99%E7%A8%8B/</link>
+    <description>Recent content in 教程 on Pij&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 22 Jul 2026 22:00:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1314/tags/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>快速入门</title>
+      <link>http://localhost:1314/docs/getting-started/</link>
+      <pubDate>Wed, 22 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>http://localhost:1314/docs/getting-started/</guid>
+      <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+&lt;p&gt;这是文档区域的示例页面。你可以在这里写项目文档、API 参考、使用手册等。&lt;/p&gt;
+&lt;h3 id=&#34;目录结构建议&#34;&gt;目录结构建议&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;docs/
+├── getting-started.md    # 快速入门
+├── installation.md       # 安装指南
+├── configuration.md      # 配置说明
+└── api/                  # API 文档
+    ├── overview.md
+    └── endpoints.md
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;编写规范&#34;&gt;编写规范&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 Markdown 编写&lt;/li&gt;
+&lt;li&gt;用 &lt;code&gt;weight&lt;/code&gt; 控制排序&lt;/li&gt;
+&lt;li&gt;可以用 &lt;code&gt;tags&lt;/code&gt; 分类标注&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;文档区的内容和博客分开，方便浏览。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+  </channel>
+</rss>
