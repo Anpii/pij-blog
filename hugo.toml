@@ -13,7 +13,6 @@ enableEmoji = true
   author = "Pi"
 
   # Label / logo
-  label = true
   [params.label]
     text = "Pij's Blog"
     icon = "/apple-touch-icon.png"
