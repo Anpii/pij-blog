@@ -9,7 +9,7 @@ enableEmoji = true
 
 [params]
   description = "Pi 的个人博客 - 记录技术笔记、机器人、VLA 模型与深度学习相关内容"
-  keywords = "机器人, VLA, 深度学习, 具身智能, MoE, 技术博客"
+  keywords = ["机器人","VLA","深度学习","具身智能","MoE","技术博客"]
   author = "Pi"
   images = ["/images/lingbot-vla-v2/lingbot_vla2_framework.png"]
   defaultTheme = "auto"
