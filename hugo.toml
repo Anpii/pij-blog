@@ -8,89 +8,51 @@ enableRobotsTXT = true
 enableEmoji = true
 
 [params]
-  description = "Pi 的个人博客 - 记录技术笔记、机器人、VLA 模型与深度学习相关内容"
+  description = "Pi 的个人博客 - 技术笔记、机器人、深度学习"
   keywords = ["机器人","VLA","深度学习","具身智能","MoE","技术博客"]
   author = "Pi"
-
-  # Label / logo
-  [params.label]
-    text = "Pij's Blog"
-    icon = "/apple-touch-icon.png"
-    iconHeight = 32
-
-  # Default theme
   defaultTheme = "auto"
   disableThemeToggle = false
-  disableSpecial1stPost = false
 
-  # Home page mode: profile mode
-  homeInfoParams = true
-
-  # Reading
+  # Reading features
   ShowReadingTime = true
   ShowWordCount = true
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = true
   ShowRssButtonInSectionTermList = true
-  ShowShareButtons = true
   ShowToc = true
   UseHugoToc = false
-
-  # Social
-  comments = false
-  social = true
-
-  # Cover images
-  [params.cover]
-    hiddenInSingle = false
-    hiddenInList = false
-    linkFullImages = true
-    responsiveImages = true
 
   # Home info
   [params.homeInfoParams]
     Title = "嗨，我是 Pi 👋"
-    Content = "这里记录我的想法、笔记和一些技术文档。"
+    Content = "这里记录技术笔记、机器人、深度学习相关的研究与思考。"
+  
+  # Cover images
+  [params.cover]
+    hiddenInSingle = true
+    hiddenInList = true
+    linkFullImages = true
+    responsiveImages = true
 
-  # Profile mode (more visually appealing)
-  [params.profileMode]
-    enabled = true
-    title = "Pij's Blog"
-    subtitle = "机器人 · 深度学习 · 技术笔记"
-    imageUrl = "/apple-touch-icon.png"
-    imageWidth = 120
-    imageHeight = 120
-    imageTitle = "P"
-
-    [[params.profileMode.buttons]]
-      name = "📝 最新博客"
-      url = "/posts/"
-    [[params.profileMode.buttons]]
-      name = "📖 文档"
-      url = "/docs/"
-    [[params.profileMode.buttons]]
-      name = "🏷️ 标签"
-      url = "/tags/"
-
-  # Social icons
-  [[params.socialIcons]]
-    name = "github"
-    url = "https://github.com/Anpii"
-  [[params.socialIcons]]
-    name = "email"
-    url = "mailto:hello@example.com"
-  [[params.socialIcons]]
-    name = "rss"
-    url = "/index.xml"
-
-  # OG image for social sharing
-  images = ["/og-image.png"]
+  # Label
+  [params.label]
+    icon = "/apple-touch-icon.png"
+    iconHeight = 28
+    text = "Pi"
 
   # Favicon
   [params.favicon]
     icon = "/favicon.ico"
     appleTouch = "/apple-touch-icon.png"
+
+  # OG image
+  images = ["/og-image.png"]
+
+  # Custom CSS
+  assets = true
+  custom_css = ["extended/custom.css"]
 
 [menu]
 
@@ -113,15 +75,15 @@ enableEmoji = true
     weight = 30
 
   [[menu.main]]
-    identifier = "search"
-    name = "搜索"
-    url = "/search/"
-    weight = 40
-
-  [[menu.main]]
     identifier = "archives"
     name = "归档"
     url = "/archives/"
+    weight = 40
+
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/"
     weight = 50
 
 [taxonomies]
@@ -132,7 +94,7 @@ enableEmoji = true
   [markup.highlight]
     lineNos = true
     lineNumbersInTable = true
-    noClasses = false
+    noClasses = true
 
   [markup.goldmark]
     [markup.goldmark.renderer]

@@ -4,15 +4,53 @@
     <title>博客 on Pij&#39;s Blog</title>
     <link>http://localhost:1314/pij-blog/posts/</link>
     <description>Recent content in 博客 on Pij&#39;s Blog</description>
-    <image>
-      <title>Pij&#39;s Blog</title>
-      <url>http://localhost:1314/images/lingbot-vla-v2/lingbot_vla2_framework.png</url>
-      <link>http://localhost:1314/images/lingbot-vla-v2/lingbot_vla2_framework.png</link>
-    </image>
     <generator>Hugo</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 22 Jul 2026 22:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jul 2026 23:58:00 +0800</lastBuildDate>
     <atom:link href="http://localhost:1314/pij-blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>π0.7：可引导的通用机器人基础模型</title>
+      <link>http://localhost:1314/pij-blog/posts/pi07-robot-foundation-model/</link>
+      <pubDate>Thu, 23 Jul 2026 23:58:00 +0800</pubDate>
+      <guid>http://localhost:1314/pij-blog/posts/pi07-robot-foundation-model/</guid>
+      <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;π0.7&lt;/strong&gt; 是 Physical Intelligence 团队最新发布的机器人基础模型，约 &lt;strong&gt;5B 参数量&lt;/strong&gt;。核心亮点是：&lt;strong&gt;开箱即用&lt;/strong&gt;，无需任务微调就能在大量灵巧操作任务上达到甚至超越专用 RL 微调模型的水平。&lt;/p&gt;
+&lt;p&gt;论文地址：https://pi.website/pi07&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;核心思路多样化-prompt-引导&#34;&gt;核心思路：多样化 Prompt 引导&lt;/h2&gt;
+&lt;p&gt;之前的 VLA 模型（如 π0、π0.5、π0.6）只给模型一个简短的语言指令作为上下文。π0.7 的突破性想法是：&lt;strong&gt;给模型提供更丰富的多模态上下文信息&lt;/strong&gt;，包括：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;子任务指令（Subtask Instructions）&lt;/strong&gt;：不仅告诉模型&amp;quot;做什么&amp;quot;，还分步骤告诉它&amp;quot;接下来做什么&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;子目标图像（Subgoal Images）&lt;/strong&gt;：用生成的图像展示场景的期望状态，比文字描述更直观&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;片段元数据（Episode Metadata）&lt;/strong&gt;：标注数据片段的执行速度、质量分数、是否有错误等&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;控制模式（Control Mode）&lt;/strong&gt;：使用关节空间还是末端执行器控制&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个设计的巧妙之处在于——它让模型可以&lt;strong&gt;从质量参差不齐的数据中学习&lt;/strong&gt;，包括失败片段和次优的自主动作数据。因为元数据告诉模型&amp;quot;这是个次优演示&amp;quot;，模型就不会简单地平均所有模式，而是学会区分好坏。&lt;/p&gt;
+&lt;h3 id=&#34;prompt-示例&#34;&gt;Prompt 示例&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Task: peel vegetables. Subtask: pick up the peeler. Speed: 8000. Quality: 5. Mistake: false. Control Mode: joint.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;模型架构&#34;&gt;模型架构&lt;/h2&gt;
+&lt;p&gt;π0.7 构建在 π0.6 的 VLA 架构和 MEM 记忆系统之上：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;视觉语言主干（VLM Backbone）&lt;/strong&gt;：基于 Gemma3 4B VLM（含 400M 视觉编码器）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Action Expert&lt;/strong&gt;：860M 参数的流匹配（Flow Matching）动作生成器&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;记忆编码器&lt;/strong&gt;：MEM 风格的视频历史编码器，支持空间和时间压缩&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多模态 Prompt&lt;/strong&gt;：语言指令 + 子目标图像 + 元数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;训练技术&#34;&gt;训练技术&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;知识绝缘（Knowledge Insulation）&lt;/strong&gt;：Action Expert 的梯度不回传 VLM 主干，保持 VLM 训练的稳定性&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Flow Matching 动作生成&lt;/strong&gt;：预测速度场而非直接预测动作，捕捉多模态动作分布&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实时动作分块（RTC）&lt;/strong&gt;：训练时模拟 0-12 步延迟，生成平滑动作轨迹&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;随机 Dropout&lt;/strong&gt;：训练时随机丢弃 Prompt 中的某些部分，使模型灵活适应不同测试场景&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;四大能力&#34;&gt;四大能力&lt;/h2&gt;
+&lt;h3 id=&#34;1-开箱即用的灵巧操作&#34;&gt;1️⃣ 开箱即用的灵巧操作&lt;/h3&gt;
+&lt;p&gt;π0.7 在没有任务微调的情况下，在大量灵巧任务上达到或超越了专用 RL 微调模型：&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Hello World</title>
       <link>http://localhost:1314/pij-blog/posts/hello-world/</link>
