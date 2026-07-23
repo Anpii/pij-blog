@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="auto" data-theme="auto">
+
+<head><script src="/pij-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1314&amp;path=pij-blog/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>基础模型 | Pij&#39;s Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="Pi 的个人博客 - 记录技术笔记、机器人、VLA 模型与深度学习相关内容">
+<meta name="author" content="Pi">
+<link rel="canonical" href="http://localhost:1314/pij-blog/tags/%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B/">
+<link crossorigin="anonymous" href="/pij-blog/assets/css/stylesheet.cd9298b33628769aa1bc1acebbbfd7aa11ce81dfe03484d479e1907760249a1d.css" integrity="sha256-zZKYszYodpqhvBrOu7/XqhHOgd/gNITUeeGQd2Akmh0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1314/pij-blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1314/pij-blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1314/pij-blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1314/pij-blog/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1314/pij-blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1314/pij-blog/tags/%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B/index.xml" title="rss">
+<link rel="alternate" hreflang="zh-cn" href="http://localhost:1314/pij-blog/tags/%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="http://localhost:1314/pij-blog/" accesskey="h" title="Pij&#39;s Blog (Alt + H)">Pij&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+            <li>
+                <a href="http://localhost:1314/pij-blog/posts/" title="博客">
+                    <span>博客</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1314/pij-blog/docs/" title="文档">
+                    <span>文档</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1314/pij-blog/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1314/pij-blog/search/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1314/pij-blog/archives/" title="归档">
+                    <span>归档</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+<header class="page-header"><nav class="breadcrumbs" role="navigation" aria-label="Breadcrumb">
+            <a href="/pij-blog/">Home</a>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <a href="/pij-blog/tags/">Tags</a>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+</nav>
+  <h1>
+    基础模型
+    <a href="/pij-blog/tags/%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B/index.xml" title="RSS" aria-label="RSS">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" height="23">
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
+      </svg>
+    </a>
+  </h1>
+</header>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">π0.7：可引导的通用机器人基础模型
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>概述 π0.7 是 Physical Intelligence 团队最新发布的机器人基础模型，约 5B 参数量。核心亮点是：开箱即用，无需任务微调就能在大量灵巧操作任务上达到甚至超越专用 RL 微调模型的水平。
+论文地址：https://pi.website/pi07
+核心思路：多样化 Prompt 引导 之前的 VLA 模型（如 π0、π0.5、π0.6）只给模型一个简短的语言指令作为上下文。π0.7 的突破性想法是：给模型提供更丰富的多模态上下文信息，包括：
+子任务指令（Subtask Instructions）：不仅告诉模型&#34;做什么&#34;，还分步骤告诉它&#34;接下来做什么&#34; 子目标图像（Subgoal Images）：用生成的图像展示场景的期望状态，比文字描述更直观 片段元数据（Episode Metadata）：标注数据片段的执行速度、质量分数、是否有错误等 控制模式（Control Mode）：使用关节空间还是末端执行器控制 这个设计的巧妙之处在于——它让模型可以从质量参差不齐的数据中学习，包括失败片段和次优的自主动作数据。因为元数据告诉模型&#34;这是个次优演示&#34;，模型就不会简单地平均所有模式，而是学会区分好坏。
+Prompt 示例 Task: peel vegetables. Subtask: pick up the peeler. Speed: 8000. Quality: 5. Mistake: false. Control Mode: joint.
+模型架构 π0.7 构建在 π0.6 的 VLA 架构和 MEM 记忆系统之上：
+视觉语言主干（VLM Backbone）：基于 Gemma3 4B VLM（含 400M 视觉编码器） Action Expert：860M 参数的流匹配（Flow Matching）动作生成器 记忆编码器：MEM 风格的视频历史编码器，支持空间和时间压缩 多模态 Prompt：语言指令 &#43; 子目标图像 &#43; 元数据 训练技术 知识绝缘（Knowledge Insulation）：Action Expert 的梯度不回传 VLM 主干，保持 VLM 训练的稳定性 Flow Matching 动作生成：预测速度场而非直接预测动作，捕捉多模态动作分布 实时动作分块（RTC）：训练时模拟 0-12 步延迟，生成平滑动作轨迹 随机 Dropout：训练时随机丢弃 Prompt 中的某些部分，使模型灵活适应不同测试场景 四大能力 1️⃣ 开箱即用的灵巧操作 π0.7 在没有任务微调的情况下，在大量灵巧任务上达到或超越了专用 RL 微调模型：
+...</p>
+  </div>
+  <footer class="entry-footer">
+
+<span title='2026-07-23 23:58:00 +0800 CST'>July 23, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>233 words</span>&nbsp;·&nbsp;<span>Pi</span></footer>
+  <a class="entry-link" aria-label="post link to π0.7：可引导的通用机器人基础模型" href="http://localhost:1314/pij-blog/posts/pi07-robot-foundation-model/"></a>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1314/pij-blog/">Pij&#39;s Blog</a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

@@ -11,32 +11,87 @@ enableEmoji = true
   description = "Pi 的个人博客 - 记录技术笔记、机器人、VLA 模型与深度学习相关内容"
   keywords = ["机器人","VLA","深度学习","具身智能","MoE","技术博客"]
   author = "Pi"
-  images = ["/images/lingbot-vla-v2/lingbot_vla2_framework.png"]
+
+  # Label / logo
+  label = true
+  [params.label]
+    text = "Pij's Blog"
+    icon = "/apple-touch-icon.png"
+    iconHeight = 32
+
+  # Default theme
   defaultTheme = "auto"
   disableThemeToggle = false
+  disableSpecial1stPost = false
+
+  # Home page mode: profile mode
+  homeInfoParams = true
+
+  # Reading
   ShowReadingTime = true
-  ShowShareButtons = false
+  ShowWordCount = true
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = true
-  ShowWordCount = true
   ShowRssButtonInSectionTermList = true
-  UseHugoToc = true
+  ShowShareButtons = true
+  ShowToc = true
+  UseHugoToc = false
 
+  # Social
+  comments = false
+  social = true
+
+  # Cover images
+  [params.cover]
+    hiddenInSingle = false
+    hiddenInList = false
+    linkFullImages = true
+    responsiveImages = true
+
+  # Home info
   [params.homeInfoParams]
     Title = "嗨，我是 Pi 👋"
     Content = "这里记录我的想法、笔记和一些技术文档。"
 
+  # Profile mode (more visually appealing)
+  [params.profileMode]
+    enabled = true
+    title = "Pij's Blog"
+    subtitle = "机器人 · 深度学习 · 技术笔记"
+    imageUrl = "/apple-touch-icon.png"
+    imageWidth = 120
+    imageHeight = 120
+    imageTitle = "P"
+
+    [[params.profileMode.buttons]]
+      name = "📝 最新博客"
+      url = "/posts/"
+    [[params.profileMode.buttons]]
+      name = "📖 文档"
+      url = "/docs/"
+    [[params.profileMode.buttons]]
+      name = "🏷️ 标签"
+      url = "/tags/"
+
+  # Social icons
   [[params.socialIcons]]
     name = "github"
-    url = "https://github.com/"
-
+    url = "https://github.com/Anpii"
   [[params.socialIcons]]
     name = "email"
     url = "mailto:hello@example.com"
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
 
-  [params.cover]
-    hiddenInSingle = false
+  # OG image for social sharing
+  images = ["/og-image.png"]
+
+  # Favicon
+  [params.favicon]
+    icon = "/favicon.ico"
+    appleTouch = "/apple-touch-icon.png"
 
 [menu]
 
@@ -79,3 +134,7 @@ enableEmoji = true
     lineNos = true
     lineNumbersInTable = true
     noClasses = false
+
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

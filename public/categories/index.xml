@@ -1,1 +1,38 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Categories on Pij's Blog</title><link>https://anpii.github.io/pij-blog/categories/</link><description>Recent content in Categories on Pij's Blog</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 23 Jul 2026 01:30:00 +0800</lastBuildDate><atom:link href="https://anpii.github.io/pij-blog/categories/index.xml" rel="self" type="application/rss+xml"/><item><title>技术文档</title><link>https://anpii.github.io/pij-blog/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/</link><pubDate>Thu, 23 Jul 2026 01:30:00 +0800</pubDate><guid>https://anpii.github.io/pij-blog/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/</guid><description/></item><item><title>文档</title><link>https://anpii.github.io/pij-blog/categories/%E6%96%87%E6%A1%A3/</link><pubDate>Wed, 22 Jul 2026 22:00:00 +0800</pubDate><guid>https://anpii.github.io/pij-blog/categories/%E6%96%87%E6%A1%A3/</guid><description/></item><item><title>杂记</title><link>https://anpii.github.io/pij-blog/categories/%E6%9D%82%E8%AE%B0/</link><pubDate>Wed, 22 Jul 2026 22:00:00 +0800</pubDate><guid>https://anpii.github.io/pij-blog/categories/%E6%9D%82%E8%AE%B0/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Categories on Pij&#39;s Blog</title>
+    <link>http://localhost:1314/pij-blog/categories/</link>
+    <description>Recent content in Categories on Pij&#39;s Blog</description>
+    <image>
+      <title>Pij&#39;s Blog</title>
+      <url>http://localhost:1314/images/lingbot-vla-v2/lingbot_vla2_framework.png</url>
+      <link>http://localhost:1314/images/lingbot-vla-v2/lingbot_vla2_framework.png</link>
+    </image>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 23 Jul 2026 01:30:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1314/pij-blog/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>技术文档</title>
+      <link>http://localhost:1314/pij-blog/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/</link>
+      <pubDate>Thu, 23 Jul 2026 01:30:00 +0800</pubDate>
+      <guid>http://localhost:1314/pij-blog/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>文档</title>
+      <link>http://localhost:1314/pij-blog/categories/%E6%96%87%E6%A1%A3/</link>
+      <pubDate>Wed, 22 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>http://localhost:1314/pij-blog/categories/%E6%96%87%E6%A1%A3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>杂记</title>
+      <link>http://localhost:1314/pij-blog/categories/%E6%9D%82%E8%AE%B0/</link>
+      <pubDate>Wed, 22 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>http://localhost:1314/pij-blog/categories/%E6%9D%82%E8%AE%B0/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
