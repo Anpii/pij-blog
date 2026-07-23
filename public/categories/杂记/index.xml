@@ -1,39 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>杂记 on Pij&#39;s Blog</title>
-    <link>http://localhost:1314/categories/%E6%9D%82%E8%AE%B0/</link>
-    <description>Recent content in 杂记 on Pij&#39;s Blog</description>
-    <generator>Hugo</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Wed, 22 Jul 2026 22:00:00 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1314/categories/%E6%9D%82%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Hello World</title>
-      <link>http://localhost:1314/posts/hello-world/</link>
-      <pubDate>Wed, 22 Jul 2026 22:00:00 +0800</pubDate>
-      <guid>http://localhost:1314/posts/hello-world/</guid>
-      <description>&lt;p&gt;欢迎来到 &lt;strong&gt;Pij&amp;rsquo;s Blog&lt;/strong&gt; 🎉&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>杂记 on Pij's Blog</title><link>https://anpii.github.io/pij-blog/categories/%E6%9D%82%E8%AE%B0/</link><description>Recent content in 杂记 on Pij's Blog</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 22 Jul 2026 22:00:00 +0800</lastBuildDate><atom:link href="https://anpii.github.io/pij-blog/categories/%E6%9D%82%E8%AE%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>Hello World</title><link>https://anpii.github.io/pij-blog/posts/hello-world/</link><pubDate>Wed, 22 Jul 2026 22:00:00 +0800</pubDate><guid>https://anpii.github.io/pij-blog/posts/hello-world/</guid><description>&lt;p&gt;欢迎来到 &lt;strong&gt;Pij&amp;rsquo;s Blog&lt;/strong&gt; 🎉&lt;/p&gt;
 &lt;p&gt;这是我的第一篇文章，用 Hugo 和 PaperMod 主题搭建的。以后会在这里分享：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;技术笔记与心得&lt;/li&gt;
 &lt;li&gt;项目文档&lt;/li&gt;
 &lt;li&gt;生活中的感悟&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;markdown-示例&#34;&gt;Markdown 示例&lt;/h3&gt;
+&lt;h3 id="markdown-示例"&gt;Markdown 示例&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;粗体&lt;/strong&gt;、&lt;em&gt;斜体&lt;/em&gt;、&lt;del&gt;删除线&lt;/del&gt;、&lt;code&gt;行内代码&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;hello&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;():&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Hello, world!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;hello&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;hello&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;Hello, world!&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;hello&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;blockquote&gt;
@@ -45,7 +30,4 @@
 &lt;li&gt;列表项 3&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;p&gt;就这样，开张愉快！&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+&lt;p&gt;就这样，开张愉快！&lt;/p&gt;</description></item></channel></rss>

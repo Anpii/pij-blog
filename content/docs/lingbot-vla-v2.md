@@ -116,7 +116,6 @@ LingBot-VLA 2.0 将不同机器人的状态/动作映射到一个 **55 维** 标
 - 路由激活函数：Softmax 或 Sigmoid
 - 损失函数：Sequence-wise Auxiliary Loss + Router Z-Loss
 
-![MoE vs Dense 模型对比](/images/lingbot-vla-v2/lingbot_vla2_loss_mse_comparison.png)
 
 ### 双查询蒸馏（Dual-Query Distillation）
 
