@@ -435,16 +435,6 @@ footer {
 .post-entry:nth-child(4) { animation-delay: .15s; }
 .post-entry:nth-child(5) { animation-delay: .2s; }
 
-/* ── Light mode overrides ── */
-:root:not(.dark) {
-  --bg: #f5f3ff;
-  --bg-card: rgba(255,255,255,.7);
-  --bg-elevated: rgba(255,255,255,.9);
-  --text: #1e1b4b;
-  --text-dim: #6b7280;
-  --border: rgba(99,102,241,.12);
-}
-
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .first-entry { padding: 60px 20px 40px !important; }
