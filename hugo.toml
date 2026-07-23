@@ -1,4 +1,4 @@
-baseURL = "https://example.org"
+baseURL = "https://anpii.github.io/pij-blog/"
 locale = "zh-cn"
 defaultContentLanguage = "zh-cn"
 title = "Pij's Blog"
