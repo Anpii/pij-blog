@@ -50,9 +50,7 @@ enableEmoji = true
   # OG image
   images = ["/og-image.png"]
 
-  # Custom CSS
-  assets = true
-  custom_css = ["extended/custom.css"]
+
 
 [menu]
 
